@@ -9,17 +9,10 @@ from flask import (
 )
 
 from services.constants import *
-from blueprints.example_blueprint import example_blueprint
-
+from blueprints.matcher import matcher_blueprint
 
 app = Flask(__name__)
-app.register_blueprint(example_blueprint)
-
-
-@app.route('/')
-def index():
-    return 'Hello world!'
-
+app.register_blueprint(matcher_blueprint)
 
 @app.errorhandler(Exception)
 def error_handler(err):
@@ -45,32 +38,7 @@ def error_handler(err):
             'traceback': traceback.format_exc(),
         }
     }
-    if not body.get('owner'):
-        res['_message'] = (
-            'No "owner" field found in request body. '
-            'Please include this field to receive an email of the trackback.'
-        )
-    err_msg_template = """<p>Your request to the {0} endpoint <b>{1}</b> has failed.</p>
-        <h3>Error traceback:</h3>
-        <code style="display: block; white-space: pre-wrap;">{2}</code>
-        <h3>Request Body</h3>
-        <code style="display: block; white-space: pre-wrap;">{3}</code>"""
-    requests.post(API_HANDLER_URL + '/sendgrid/send-email', json={
-        'auth_key': PHBI_SENDGRID_AUTH_KEY,
-        'from_email':'phbi-server-noreply@shopee.com',
-        'to_email': ADMINS,
-        'cc_email': body.get('owner', ''),
-        'subject': '{} Server Failed - {}'.format(
-            PROJECT_NAME,
-            request.full_path,
-        ),
-        'content': err_msg_template.format(
-            PROJECT_NAME,
-            request.full_path,
-            traceback.format_exc(),
-            pprint.pformat(body)
-        )
-    })
+    print(res)
     return jsonify(res), 500
 
 

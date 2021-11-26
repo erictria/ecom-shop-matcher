@@ -3,3 +3,7 @@ gunicorn
 python-dotenv
 requests
 typing-extensions
+pandas
+fuzzywuzzy
+python-levenshtein
+scikit-learn
