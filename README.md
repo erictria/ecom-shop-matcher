@@ -2,8 +2,8 @@
 Finding potential matching shops between e-commerce platforms
 
 E-commerce platforms used: Shopee and Lazada
-Shopee: https://shopee.ph/
-Lazada: https://www.lazada.com.ph/
+- Shopee: https://shopee.ph/
+- Lazada: https://www.lazada.com.ph/
   
 ## Endpoints
 
