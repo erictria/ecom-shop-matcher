@@ -50,7 +50,7 @@ def search_lzd_items(item_name, proxy):
             delay = 7 + (2 * retry)
             time.sleep(delay)
             retry += 1
-            # print('RETRYING', retries, item_name, str(e))
+            print('RETRYING', retry, item_name, str(e))
 
     if len(items) > 0:
         items = list(map(lambda x: {
@@ -83,7 +83,7 @@ def get_lzd_item_details(lzd_item_url, proxy, timeout=5):
         except Exception as e:
             delay = timeout + (2 * retry)
             time.sleep(delay)
-            # print('Error getting lzd item details', lzd_item_url, e)
+            print('Error getting lzd item details', lzd_item_url, e)
             retry += 1
 
     return details
@@ -109,7 +109,7 @@ def get_lzd_shop_items(lzd_item_url, proxy, timeout=5):
         except Exception as e:
             delay = timeout + (2 * retry)
             time.sleep(delay)
-            # print('Error getting lzd shop items', lzd_shop_url, e)
+            print('Error getting lzd shop items', lzd_shop_url, e)
             retry += 1
     for item in items:
         item['key'] = lzd_item_url
@@ -143,7 +143,7 @@ def get_shopee_items(shop_id, proxy):
             }, items))
             req_worked = True
         except Exception as e:
-            # print('ERROR IN SHOPEE ITEMS', str(e))
+            print('ERROR IN SHOPEE ITEMS', str(e))
             retry += 1
             time.sleep(2 * (retry + 1))
     return item_details
@@ -160,11 +160,6 @@ def match_shopee_shop(shopid, proxy):
     search_df = pd.DataFrame()
     item_names = top_shopee_items_df['item_name'].drop_duplicates().values.tolist()
 
-    # num_cores = multiprocessing.cpu_count()
-    # pool = Pool(MAX_CONNECTIONS)
-    # search_results_2d = list(pool.map(search_lzd_items, item_names))
-    # search_results = list(itertools.chain.from_iterable(search_results_2d))
-    # search_df = pd.DataFrame(search_results)
     search_results = []
     with ThreadPoolExecutor(max_workers=MAX_CONNECTIONS) as executor:
         future_to_url = {
@@ -188,10 +183,6 @@ def match_shopee_shop(shopid, proxy):
 
     # LZD SHOP ITEMS / ITEM LEVEL SEARCH
     laz_item_urls = top_shops['LZD_item_url'].drop_duplicates().values.tolist()
-    # laz_shops_items = []
-    # laz_shops_items_2d = list(pool.map(get_lzd_shop_items, laz_item_urls))
-    # laz_shops_items = list(itertools.chain.from_iterable(laz_shops_items_2d))
-
     laz_shops_items = []
     with ThreadPoolExecutor(max_workers=MAX_CONNECTIONS) as executor:
         future_to_url = {

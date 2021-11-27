@@ -7,3 +7,4 @@ pandas
 fuzzywuzzy
 python-levenshtein
 scikit-learn
+html2text

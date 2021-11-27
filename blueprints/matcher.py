@@ -25,7 +25,8 @@ def match_shopee():
     try:
         matches = match_functions.match_shopee_shop(shopid, proxy)
         match_list = matches.to_dict('records')
-    except:
+    except Exception as e:
+        print('ERROR matching shop', str(e))
         match_list = []
     return jsonify({
         'shopid': shopid,
