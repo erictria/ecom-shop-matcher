@@ -163,7 +163,7 @@ def match_shopee_shop(shopid, proxy):
     search_results = []
     with ThreadPoolExecutor(max_workers=MAX_CONNECTIONS) as executor:
         future_to_url = {
-            executor.submit(search_lzd_items, shopid, proxy)
+            executor.submit(search_lzd_items, item_name, proxy)
             for item_name in item_names
         }
         for future in as_completed(future_to_url):

@@ -7,13 +7,27 @@ from services.constants import *
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-def lazada_search(request):
+def lazada_search_api(request):
     search_keyword = request['search_keyword']
     proxy = request['proxy']
     api_link = 'https://www.lazada.com.ph/catalog/?_keyori=ss&ajax=true&from=input&page=1&q={}'.format(search_keyword)
 
     res = requests.get(api_link, proxies=proxy, verify=False)
     data = res.json()
+    items = data['mods']['listItems']
+
+    response = {
+        'items': items
+    }
+    return response
+
+def lazada_search(request):
+    search_keyword = str(request['search_keyword'])
+    proxy = request['proxy']
+    lzd_search_url = 'https://www.lazada.com.ph/catalog/?q={}&_keyori=ss&from=input'.format(search_keyword.replace(' ','+'))
+
+    res = requests.get(lzd_search_url, proxies=proxy, verify=False)
+    data = json.loads(re.search('<script>\n    window.pageData = (.+)?;\n  </script>', res.text).group(1))
     items = data['mods']['listItems']
 
     response = {
